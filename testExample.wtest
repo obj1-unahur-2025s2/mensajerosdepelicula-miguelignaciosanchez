@@ -1,9 +1,78 @@
-import example.pepita
+import example.*
 
-describe "group of tests for pepita" {
-
-  test "pepita has initial energy" {
-    assert.equals(100, pepita.energy())
+describe "Primera parte: Destinos y mensajeros" {
+  test "Roberto (90kg) puede llevar un paquete pagado en camión con un acoplado al Puente de Brooklyn"{
+    Roberto.usarCamion()
+    Roberto.cambiarAcoplados(1)
+    Paquete.cambiarPago()
+    assertEquals(590, Roberto.peso())    
+    assert PuenteBrooklyn.puedeEntrar(Roberto)   
+    assert Entrega.puedeEntregar(Roberto, Paquete, PuenteBrooklyn)
   }
+  test "Neo con crédito no puede llevar un paquete no pagado a la Matrix"{
+    Neo.credito = true
+    if (Paquete.estaPagado()){
+      Paquete.cambiarPago()
+    }
+    assert Neo.puedeLlamar()
+    assert not Paquete.estaPagado()
+    assert not Entrega.puedeEntregar(Neo, Paquete, Matrix)
+  }
+  test "Chuck Norris siempre puede llamar y puede entrar a la Matrix"{
+    assert ChuckNorris.puedeLlamar()
+    assert Matrix.puedeEntrar(ChuckNorris)
+  }
+  test "Roberto en bici pesa 95kg"{
+    Roberto.usarBici()
+    assertEquals(95, Roberto.peso())
+  }
+  test "Neo sin crédito no puede entrar a la Matrix"{
+    Neo.credito = false
+    assert not Matrix.puedeEntrar(Neo)
+  }
+}
 
+describe "Segunda parte: Empresa de mensajería" {
+  test "Contratar un mensajero lo agrega a la lista" {
+    EmpresaMensajeria.despedirATodos()
+    EmpresaMensajeria.contratar(Roberto)
+    assertEquals(1, EmpresaMensajeria.mensajeros.size())
+  }
+  test "Despedir un mensajero lo quita de la lista" {
+    EmpresaMensajeria.despedirATodos()
+    EmpresaMensajeria.contratar(Roberto)
+    EmpresaMensajeria.contratar(Neo)
+    EmpresaMensajeria.despedir(Roberto)
+    assertEquals(1, EmpresaMensajeria.mensajeros.size())
+    assert EmpresaMensajeria.mensajeros.contains(Neo)
+    assert not EmpresaMensajeria.mensajeros.contains(Roberto)
+  }
+  test "Despedir a todos deja la lista vacía" {
+    EmpresaMensajeria.contratar(Roberto)
+    EmpresaMensajeria.contratar(Neo)
+    EmpresaMensajeria.despedirATodos()
+    assertEquals(0, EmpresaMensajeria.mensajeros.size())
+  }
+  test "Una empresa con más de 2 mensajeros es grande" {
+    EmpresaMensajeria.despedirATodos()
+    EmpresaMensajeria.contratar(Roberto)
+    EmpresaMensajeria.contratar(Neo)
+    EmpresaMensajeria.contratar(ChuckNorris)
+    assert EmpresaMensajeria.esGrande()
+  }
+  test "Primer mensajero puede entregar si cumple condiciones" {
+    EmpresaMensajeria.despedirATodos()
+    EmpresaMensajeria.contratar(Roberto)
+    Roberto.usarCamion()
+    Roberto.cambiarAcoplados(1)
+    if (not Paquete.estaPagado()) { Paquete.cambiarPago() }
+    assert EmpresaMensajeria.primerPuedeEntregar(Paquete, PuenteBrooklyn)
+  }
+  test "Peso del último mensajero" {
+    EmpresaMensajeria.despedirATodos()
+    EmpresaMensajeria.contratar(Roberto)
+    EmpresaMensajeria.contratar(Neo)
+    Neo.vuela = true
+    assertEquals(0, EmpresaMensajeria.pesoUltimoMensajero())
+  }
 }
