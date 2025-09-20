@@ -2,77 +2,77 @@ import example.*
 
 describe "Primera parte: Destinos y mensajeros" {
   test "Roberto (90kg) puede llevar un paquete pagado en camión con un acoplado al Puente de Brooklyn"{
-    Roberto.usarCamion()
-    Roberto.cambiarAcoplados(1)
-    Paquete.cambiarPago()
-    assertEquals(590, Roberto.peso())    
-    assert PuenteBrooklyn.puedeEntrar(Roberto)   
-    assert Entrega.puedeEntregar(Roberto, Paquete, PuenteBrooklyn)
+    roberto.usarCamion()
+    roberto.cambiarAcoplados(1)
+    paquete.cambiarPago()
+    assertEquals(590, roberto.peso())    
+    assert puenteBrooklyn.puedeEntrar(roberto)   
+    assert entrega.puedeEntregar(roberto, paquete, puenteBrooklyn)
   }
   test "Neo con crédito no puede llevar un paquete no pagado a la Matrix"{
-    Neo.credito = true
-    if (Paquete.estaPagado()){
-      Paquete.cambiarPago()
+    neo.credito = true
+    if (paquete.estaPagado()){
+      paquete.cambiarPago()
     }
-    assert Neo.puedeLlamar()
-    assert not Paquete.estaPagado()
-    assert not Entrega.puedeEntregar(Neo, Paquete, Matrix)
+    assert neo.puedeLlamar()
+    assert not paquete.estaPagado()
+    assert not entrega.puedeEntregar(neo, paquete, matrix)
   }
   test "Chuck Norris siempre puede llamar y puede entrar a la Matrix"{
-    assert ChuckNorris.puedeLlamar()
-    assert Matrix.puedeEntrar(ChuckNorris)
+    assert chuckNorris.puedeLlamar()
+    assert matrix.puedeEntrar(chuckNorris)
   }
   test "Roberto en bici pesa 95kg"{
-    Roberto.usarBici()
-    assertEquals(95, Roberto.peso())
+    roberto.usarBici()
+    assertEquals(95, roberto.peso())
   }
   test "Neo sin crédito no puede entrar a la Matrix"{
-    Neo.credito = false
-    assert not Matrix.puedeEntrar(Neo)
+    neo.credito = false
+    assert not matrix.puedeEntrar(neo)
   }
 }
 
 describe "Segunda parte: Empresa de mensajería" {
   test "Contratar un mensajero lo agrega a la lista" {
-    EmpresaMensajeria.despedirATodos()
-    EmpresaMensajeria.contratar(Roberto)
+    empresaMensajeria.despedirATodos()
+    empresaMensajeria.contratar(roberto)
     assertEquals(1, EmpresaMensajeria.mensajeros.size())
   }
   test "Despedir un mensajero lo quita de la lista" {
-    EmpresaMensajeria.despedirATodos()
-    EmpresaMensajeria.contratar(Roberto)
-    EmpresaMensajeria.contratar(Neo)
-    EmpresaMensajeria.despedir(Roberto)
+    empresaMensajeria.despedirATodos()
+    empresaMensajeria.contratar(roberto)
+    empresaMensajeria.contratar(neo)
+    empresaMensajeria.despedir(roberto)
     assertEquals(1, EmpresaMensajeria.mensajeros.size())
-    assert EmpresaMensajeria.mensajeros.contains(Neo)
-    assert not EmpresaMensajeria.mensajeros.contains(Roberto)
+    assert EmpresaMensajeria.mensajeros.contains(neo)
+    assert not EmpresaMensajeria.mensajeros.contains(roberto)
   }
   test "Despedir a todos deja la lista vacía" {
-    EmpresaMensajeria.contratar(Roberto)
-    EmpresaMensajeria.contratar(Neo)
-    EmpresaMensajeria.despedirATodos()
-    assertEquals(0, EmpresaMensajeria.mensajeros.size())
+    empresaMensajeria.contratar(roberto)
+    empresaMensajeria.contratar(neo)
+    empresaMensajeria.despedirATodos()
+    assertEquals(0, empresaMensajeria.mensajeros.size())
   }
   test "Una empresa con más de 2 mensajeros es grande" {
-    EmpresaMensajeria.despedirATodos()
-    EmpresaMensajeria.contratar(Roberto)
-    EmpresaMensajeria.contratar(Neo)
-    EmpresaMensajeria.contratar(ChuckNorris)
-    assert EmpresaMensajeria.esGrande()
+    empresaMensajeria.despedirATodos()
+    empresaMensajeria.contratar(Roberto)
+    empresaMensajeria.contratar(Neo)
+    empresaMensajeria.contratar(ChuckNorris)
+    assert empresaMensajeria.esGrande()
   }
   test "Primer mensajero puede entregar si cumple condiciones" {
-    EmpresaMensajeria.despedirATodos()
-    EmpresaMensajeria.contratar(Roberto)
-    Roberto.usarCamion()
-    Roberto.cambiarAcoplados(1)
-    if (not Paquete.estaPagado()) { Paquete.cambiarPago() }
-    assert EmpresaMensajeria.primerPuedeEntregar(Paquete, PuenteBrooklyn)
+    empresaMensajeria.despedirATodos()
+    empresaMensajeria.contratar(roberto)
+    roberto.usarCamion()
+    roberto.cambiarAcoplados(1)
+    if (not paquete.estaPagado()) { paquete.cambiarPago() }
+    assert empresaMensajeria.primerPuedeEntregar(paquete, puenteBrooklyn)
   }
   test "Peso del último mensajero" {
-    EmpresaMensajeria.despedirATodos()
-    EmpresaMensajeria.contratar(Roberto)
-    EmpresaMensajeria.contratar(Neo)
-    Neo.vuela = true
-    assertEquals(0, EmpresaMensajeria.pesoUltimoMensajero())
+    empresaMensajeria.despedirATodos()
+    empresaMensajeria.contratar(roberto)
+    empresaMensajeria.contratar(neo)
+    neo.vuela = true
+    assertEquals(0, empresaMensajeria.pesoUltimoMensajero())
   }
 }
